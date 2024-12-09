@@ -1,0 +1,3 @@
+hello
+this is a file for try-with-resources using
+just a demo text.
