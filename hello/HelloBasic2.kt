@@ -9,7 +9,7 @@ fun main(args: Array<String>) {
     loopTest()
     loop2()
     nullTest()
-	unitType()
+    unitType()
 }
 
 fun whenTest() {
@@ -134,6 +134,20 @@ fun loop2() {
     for ((k, v) in map) {
         println("$k -> $v")
     }
+
+    foo()
+}
+
+fun foo() {
+    println("nested loop...")
+    run loop@{
+        listOf(1, 2, 3, 4, 5).forEach {
+            if (it == 3) return@loop
+            print(it)
+        }
+    }
+    println("\ndone with nested loop")
+
 }
 
 fun nullTest() {

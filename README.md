@@ -61,3 +61,68 @@ Kotlin 中所有类都继承Any 类，它是所有类的超类，对于没有超
 注意：Any 不是 java.lang.Object
 如果一个类要被继承，可以使用 open 关键字进行修饰
 
+#### 修饰符
+如果一个声明有多个修饰符，请始终按照以下顺序安放：
+```
+public / protected / private / internal
+expect / actual
+final / open / abstract / sealed / const
+external
+override
+lateinit
+tailrec
+vararg
+suspend
+inner
+enum / annotation / fun // 在 `fun interface` 中是修饰符
+companion
+inline/ value
+infix
+operator
+data
+```
+将所有注解放在修饰符前：
+```
+@Named("Foo")
+private val foo: Foo
+```
+
+### 包
+#### 默认导入
+有多个包会默认导入到每个 Kotlin 文件中：
+```
+kotlin.*
+kotlin.annotation.*
+kotlin.collections.*
+kotlin.comparisons.*
+kotlin.io.*
+kotlin.ranges.*
+kotlin.sequences.*
+kotlin.text.*
+```
+根据目标平台还会导入额外的包：
+
+JVM:
+```
+java.lang.*
+kotlin.jvm.*
+```
+JS:
+```
+kotlin.js.*
+```
+#### 导入包
+除了默认导入之外，每个文件可以包含它自己的导入（import）指令。
+可以导入一个单个名称：
+```
+import org.example.Message // 现在 Message 可以不用限定符访问
+```
+也可以导入一个作用域下的所有内容：包、类、对象等:
+```
+import org.example.* // “org.example”中的一切都可访问
+```
+如果出现名字冲突，可以使用 as 关键字在本地重命名冲突项来消歧义：
+```
+import org.example.Message // Message 可访问
+import org.test.Message as TestMessage // TestMessage 代表“org.test.Message”
+```

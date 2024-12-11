@@ -51,6 +51,87 @@ abstract class AbsBase{
 	abstract fun sleep()
 }
 
+class InitOrderDemo(name:String){
+	val firstName = "First name:${name}".also(::println)
+
+	init {
+		println("First initializer block that prints $name")
+	}
+
+	val lastName = "Last name: ${name.length}".also(::println)
+	init{
+		println("Second initializer block that prints ${name.length}")
+	}
+}
+
+class Person(val pets: MutableList<Pet> = mutableListOf())
+
+class Pet {
+	constructor(owner: Person){
+		owner.pets.add(this)
+	}
+}
+
+// 包含主，次构造函数
+class Person1(val name:String){
+	val children:MutableList<Person1> = mutableListOf()
+	constructor(name: String, parent: Person1): this(name){
+		parent.children.add(this)
+	}
+}
+
+// 去除默认公胡构造函数
+class DontCreateIt private constructor(){}
+
+// 默认类是final,不允许继承
+// this type is final, so it cannot be extended.
+/*class Person2(val name:String) : Person1(name){
+	
+}*/
+
+// 覆盖方法
+open class Shape{
+	open fun draw(){
+		println("draw shape...")
+	}
+
+	// 默认是final,不可覆盖
+	fun fill(){
+		println("fill shape")
+	}
+}
+
+class Circle : Shape(){
+	override fun draw(){
+		println("draw circle...")
+	}
+	// 父类中方法，需要使用override
+	/*fun fill(){
+		println("circle")
+	}*/
+	// 父类中方法为final,不允许覆盖
+	/*override fill(){
+		println("circle")
+	}*/
+}
+
+// 覆盖属性
+open class Shape1{
+	open val vertexCount:Int = 0
+}
+class Rectangle : Shape1() {
+	// 覆盖父类属性
+	override val vertexCount = 4
+}
+
+interface Shape2 {
+	val vertexCount:Int
+}
+
+class Rectangle2(override val vertexCount: Int = 4) : Shape2
+class Polygon: Shape2 {
+	override val vertexCount: Int = 0
+}
 
 fun main(args: Array<String>) {
 	val b = Parent.Chid().bar()
@@ -68,6 +149,16 @@ fun main(args: Array<String>) {
 	}
 	obj.hello()
 	obj.sleep()
+
+	InitOrderDemo("hello")
+
+	val shape = Shape()
+	shape.draw()
+	val circle = Circle()
+	circle.draw()
+
+	val rect = Rectangle()
+	println("vertexCount: ${rect.vertexCount}")
 
 /*	var test = Test()
 	test.setInterface(obj: TestInterface {
