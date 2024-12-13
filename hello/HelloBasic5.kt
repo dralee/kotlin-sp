@@ -1,7 +1,7 @@
 /**
  * basic using
  * 2024.12.11 by dralee
- * 
+ * 函数式接口和类型别名用途并不相同。 类型别名只是现有类型的名称——它们不会创建新的类型，而函数式接口却会创建新类型
  */
 
 // 派生类初始化顺序
@@ -71,6 +71,22 @@ class Square() : Rectangle(), Polygon {
 	}
 }
 
+// SAM，单一抽象方法接口
+// 函数工序可有多个非抽象成员，但只能有一个抽象成员
+fun interface IntPredicate{
+	fun accept(i: Int): Boolean
+}
+
+// 类型别名
+typealias IntPredicate2 = (i: Int) -> Boolean
+
+// 扩展函数
+fun MutableList<Int>.swap(index1: Int, index2: Int) {
+	val temp = this[index1]
+	this[index1] = this[index2]
+	this[index2] = temp
+}
+
 
 fun main(args: Array<String>){
 	println("constructing the derived class(\"hello\",\"world\"):")
@@ -85,4 +101,26 @@ fun main(args: Array<String>){
 
 	val square = Square()
 	square.draw()
+
+	// normal using
+	val isEven = object : IntPredicate {
+		override fun accept(i: Int): Boolean {
+			return i % 2 == 0
+		}
+	}
+	println("7 isEven: ${isEven.accept(7)}")
+
+	// SMA using
+	val isEven2 = IntPredicate { it % 2 == 0 }
+	println("8 isEven: ${isEven2.accept(8)}")
+
+	// type alias
+	val isEven3: IntPredicate2 = { it % 2 == 0 }
+	println("9 isEven: ${isEven3(9)}")
+
+	val list = mutableListOf(1,2,3,4,5)
+	println("before swap:${list.joinToString()}")
+	list.swap(1, 3)
+	println("after swap:${list.joinToString()}")
+
 }
